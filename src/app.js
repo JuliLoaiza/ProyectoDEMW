@@ -31,3 +31,17 @@ app.post("/post", async (req, res) => {
     res.send({ status: "Algo salió mal, intenta de nuevo" });
   }
 });
+
+require("./components/userDetails");
+
+const User = mongoose.model("UserInfo");
+
+app.post("/register", async (req, res) => {
+  const { name, email, number } = req.body;
+  try {
+    await User.create({ uname: name, email, number: number });
+    res.send({ status: "Ok" });
+  } catch (error) {
+    res.send({ status: "Error" });
+  }
+});
