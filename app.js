@@ -1,9 +1,20 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
 app.use(express.json());
 
+const mongoURL = "mongodb+srv://DEMW:DEMW@cluster0.vzc4c3i.mongodb.net/";
+mongoose
+  .connect(mongoURL, {
+    useNewUrlParser: true,
+  })
+  .then(() => {
+    console.log("Conectado a la Base de Datos");
+  })
+  .catch((e) => console.log(e));
+
 app.listen(5000, () => {
-  console.log("Server Started");
+  console.log("Servidor iniciado");
 });
 
 app.post("/post", async (req, res) => {
