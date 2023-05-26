@@ -40,7 +40,7 @@ app.post("/register", async (req, res) => {
   const { name, email, number } = req.body;
   try {
     await User.create({ uname: name, email, number: number });
-    res.send({ status: "Ok" });
+    res.send({ status: "ok" });
   } catch (error) {
     res.send({ status: "Error" });
   }
