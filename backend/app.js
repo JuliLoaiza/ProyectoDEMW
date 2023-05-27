@@ -6,6 +6,10 @@ const cors = require("cors");
 app.use(cors());
 const bcrypt = require("bcryptjs");
 
+const jwt = require("jsonwebtoken");
+const JWT_SECRET =
+  "kjsgaduiq[adaskd][[]oaghsuidgasiug((?ASdasdasdjbdj2913yuw1ee9999";
+
 const mongoURL = "mongodb+srv://DEMW:DEMW@cluster0.vzc4c3i.mongodb.net/";
 mongoose
   .connect(mongoURL, {
@@ -39,4 +43,23 @@ app.post("/register", async (req, res) => {
   } catch (error) {
     res.send({ status: "Error" });
   }
+});
+
+app.post("/login-user", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.json({ error: "Usuario no encontrado" });
+  }
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign({}, JWT_SECRET);
+
+    if (res.status(201)) {
+      return res.json({ status: "ok", data: token });
+    } else {
+      return res.json({ error: "error" });
+    }
+  }
+  res.json({ status: "error", error: "InvAlid Password" });
 });
