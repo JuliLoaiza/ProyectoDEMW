@@ -9,10 +9,16 @@ export default class SignUp extends Component {
             email: "",
             password: "",
         };
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        const { fname, lname, email, password } = this.state;
+        console.log(fname, lname, email, password);
     }
     render() {
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <h3>Sign Up</h3>
 
                 <div className="mb-3">
