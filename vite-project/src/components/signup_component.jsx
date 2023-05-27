@@ -28,6 +28,7 @@ export default class SignUp extends Component {
             }),
         }).then((res) => res.json())
             .then((data) => {
+                alert("Usuario Registrado Correctamente");
                 console.log(data, "userRegister");
             })
     }

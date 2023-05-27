@@ -53,7 +53,7 @@ app.post("/login-user", async (req, res) => {
     return res.json({ error: "Usuario no encontrado" });
   }
   if (await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign({}, JWT_SECRET);
+    const token = jwt.sign({ email: user.email }, JWT_SECRET);
 
     if (res.status(201)) {
       return res.json({ status: "ok", data: token });
@@ -62,4 +62,19 @@ app.post("/login-user", async (req, res) => {
     }
   }
   res.json({ status: "error", error: "InvAlid Password" });
+});
+
+app.post("/userData", async (req, res) => {
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, JWT_SECRET);
+    const useremail = user.email;
+    User.findOne({ email: useremail })
+      .then((data) => {
+        res.send({ status: "ok", data: data });
+      })
+      .catch((error) => {
+        res.send({ status: "error", data: data });
+      });
+  } catch (error) {}
 });
