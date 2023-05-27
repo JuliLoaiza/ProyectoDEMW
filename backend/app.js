@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 app.use(express.json());
 const cors = require("cors");
 app.use(cors());
+const bcrypt = require("bcryptjs");
 
 const mongoURL = "mongodb+srv://DEMW:DEMW@cluster0.vzc4c3i.mongodb.net/";
 mongoose
@@ -27,8 +28,13 @@ const User = mongoose.model("UserInfo");
 
 app.post("/register", async (req, res) => {
   const { fname, lname, email, password } = req.body;
+  const encryptedPassword = await bcrypt.hash(password, 10);
   try {
-    await User.create({ fname, lname, email, password });
+    const oldUser = await User.findOne({ email });
+    if (oldUser) {
+      return res.send({ error: "El usuario ya existe" });
+    }
+    await User.create({ fname, lname, email, password: encryptedPassword });
     res.send({ status: "ok" });
   } catch (error) {
     res.send({ status: "Error" });
