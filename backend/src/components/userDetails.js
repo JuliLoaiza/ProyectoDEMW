@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 
 const userDetails = new mongoose.Schema(
   {
-    uname: String,
+    fname: String,
+    lname: String,
     email: String,
-    number: String,
+    password: String,
   },
   {
     collection: "UserInfo",
