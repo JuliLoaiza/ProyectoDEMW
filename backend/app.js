@@ -24,10 +24,7 @@ app.listen(5000, () => {
   console.log("Servidor iniciado");
 });
 
-// -------------
-
 require("./src/components/userDetails");
-
 const User = mongoose.model("UserInfo");
 
 app.post("/register", async (req, res) => {
@@ -53,7 +50,9 @@ app.post("/login-user", async (req, res) => {
     return res.json({ error: "Usuario no encontrado" });
   }
   if (await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign({ email: user.email }, JWT_SECRET);
+    const token = jwt.sign({ email: user.email }, JWT_SECRET, {
+      expiresIn: "15m",
+    });
 
     if (res.status(201)) {
       return res.json({ status: "ok", data: token });
@@ -67,7 +66,10 @@ app.post("/login-user", async (req, res) => {
 app.post("/userData", async (req, res) => {
   const { token } = req.body;
   try {
-    const user = jwt.verify(token, JWT_SECRET);
+    const user = jwt.verify(token, JWT_SECRET, (err, res) => {
+      console.log(err, "error");
+      console.log(res, "result");
+    });
     const useremail = user.email;
     User.findOne({ email: useremail })
       .then((data) => {
