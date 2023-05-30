@@ -1,86 +1,130 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
-export default class SignUp extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            fname: "",
-            lname: "",
-            email: "",
-            password: "",
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    handleSubmit(e) {
+export default function SignUp() {
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [userType, setUserType] = useState("");
+    const [secretKey, setSecretKey] = useState("");
+
+    const handleSubmit = (e) => {
+
         e.preventDefault();
-        const { fname, lname, email, password } = this.state;
+
         console.log(fname, lname, email, password);
         fetch("http://localhost:5000/register", {
             method: "POST",
             crossDomain: true,
             headers: {
-                "Content-type": "application/json",
+                "Content-Type": "application/json",
                 Accept: "application/json",
                 "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify({
-                fname, lname, email, password
+                fname,
+                email,
+                lname,
+                password,
+                userType,
             }),
-        }).then((res) => res.json())
+        })
+            .then((res) => res.json())
             .then((data) => {
-                alert("Usuario Registrado Correctamente");
                 console.log(data, "userRegister");
-            })
-    }
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <h3>Sign Up</h3>
+                if (data.status == "ok") {
+                    alert("Registration Successful");
+                } else {
+                    alert("Something went wrong");
+                }
+            });
 
-                <div className="mb-3">
-                    <label>Nombre</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Nombre"
-                        onChange={(e) => this.setState({ fname: e.target.value })}
-                    />
-                </div>
+    };
 
-                <div className="mb-3">
-                    <label>Apellido</label>
-                    <input type="text" className="form-control" placeholder="Apellido" onChange={(e) => this.setState({ lname: e.target.value })} />
-                </div>
+    return (
+        <div className="auth-wrapper">
+            <div className="auth-inner">
+                <form onSubmit={handleSubmit}>
+                    <h3>Sign Up</h3>
+                    <div>
+                        Registrar como
+                        <input
+                            type="radio"
+                            name="UserType"
+                            value="Usuario"
+                            onChange={(e) => setUserType(e.target.value)}
+                        />
+                        Usuario
+                        <input
+                            type="radio"
+                            name="UserType"
+                            value="Proveedor"
+                            onChange={(e) => setUserType(e.target.value)}
+                        />
+                        Proveedor
+                    </div>
+                    {userType == "Proveedor" ? (
+                        <div className="mb-3">
+                            <label>Servicio</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Servicio"
+                                onChange={(e) => setSecretKey(e.target.value)}
+                            />
+                        </div>
+                    ) : null}
 
-                <div className="mb-3">
-                    <label>Correo Electrónico</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Email"
-                        onChange={(e) => this.setState({ email: e.target.value })}
-                    />
-                </div>
+                    <div className="mb-3">
+                        <label>First name</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="First name"
+                            onChange={(e) => setFname(e.target.value)}
+                        />
+                    </div>
 
-                <div className="mb-3">
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Contraseña"
-                        onChange={(e) => this.setState({ password: e.target.value })}
-                    />
-                </div>
+                    <div className="mb-3">
+                        <label>Last name</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Last name"
+                            onChange={(e) => setLname(e.target.value)}
+                        />
+                    </div>
 
-                <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">
-                        Enviar
-                    </button>
-                </div>
-                <p className="forgot-password text-right">
-                    ¿Ya estás registrado? <a href="/sign-in">Inicia Sesión</a>
-                </p>
-            </form>
-        );
-    }
+                    <div className="mb-3">
+                        <label>Email address</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            placeholder="Enter email"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Enter password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="d-grid">
+                        <button type="submit" className="btn btn-primary">
+                            Sign Up
+                        </button>
+                    </div>
+                    <p className="forgot-password text-right">
+                        Already registered <a href="/sign-in">sign in?</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    );
 }

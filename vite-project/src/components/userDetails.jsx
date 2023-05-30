@@ -29,6 +29,7 @@ export default function UserDetails() {
 
                 setUserData(data.data);
 
+                // Cerrar Sesión
                 if (data.data == "token expired") {
                     alert("Token expired login again");
                     window.localStorage.clear();
