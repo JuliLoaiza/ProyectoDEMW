@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 
-const userDetails = new mongoose.Schema(
+const UserDetailsScehma = new mongoose.Schema(
   {
     fname: String,
     lname: String,
     email: { type: String, unique: true },
     password: String,
+    userType: String,
   },
   {
     collection: "UserInfo",
   }
 );
 
-mongoose.model("UserInfo", userDetails);
+mongoose.model("UserInfo", UserDetailsScehma);

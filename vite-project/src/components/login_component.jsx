@@ -1,17 +1,12 @@
 import React, { Component, useState } from "react";
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            email: "",
-            password: "",
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    handleSubmit(e) {
+export default function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    function handleSubmit(e) {
         e.preventDefault();
-        const { email, password } = this.state;
+
         console.log(email, password);
         fetch("http://localhost:5000/login-user", {
             method: "POST",
@@ -25,7 +20,8 @@ export default class Login extends Component {
                 email,
                 password,
             }),
-        }).then((res) => res.json())
+        })
+            .then((res) => res.json())
             .then((data) => {
                 console.log(data, "userRegister");
                 if (data.status == "ok") {
@@ -35,56 +31,58 @@ export default class Login extends Component {
 
                     window.location.href = "./userDetails";
                 }
-
             });
     }
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <h3>Log In</h3>
 
-                <div className="mb-3">
-                    <label>Correo Electrónico</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Ingresa tu email"
-                        onChange={(e) => this.setState({ email: e.target.value })}
-                    />
-                </div>
+    return (
+        <div className="auth-wrapper">
+            <div className="auth-inner">
+                <form onSubmit={handleSubmit}>
+                    <h3>Log In</h3>
 
-                <div className="mb-3">
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Ingresa tu contraseña"
-                        onChange={(e) => this.setState({ password: e.target.value })}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <div className="custom-control custom-checkbox">
+                    <div className="mb-3">
+                        <label>Correo Electrónico</label>
                         <input
-                            type="checkbox"
-                            className="custom-control-input"
-                            id="customCheck1"
+                            type="email"
+                            className="form-control"
+                            placeholder="Correo electrónico"
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-                        <label className="custom-control-label" htmlFor="customCheck1">
-                            Recuérdame
-                        </label>
                     </div>
-                </div>
 
-                <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">
-                        Enviar
-                    </button>
-                </div>
-                <p className="forgot-password text-right">
-                    <a href="#">¿Olvidaste tu contraseña?</a>
-                </p>
-            </form>
-        );
-    }
+                    <div className="mb-3">
+                        <label>Contraseña</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Contraseña"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <div className="custom-control custom-checkbox">
+                            <input
+                                type="checkbox"
+                                className="custom-control-input"
+                                id="customCheck1"
+                            />
+                            <label className="custom-control-label" htmlFor="customCheck1">
+                                Recuérdame
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="d-grid">
+                        <button type="submit" className="btn btn-primary">
+                            Enviar
+                        </button>
+                    </div>
+                    <p className="forgot-password text-right">
+                        <a href="/sign-up">Regístrate</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    );
 }
