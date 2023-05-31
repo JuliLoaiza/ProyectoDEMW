@@ -36,7 +36,7 @@ function App() {
                 </nav>
                 <div className="auth-wrapper">
                     <Routes>
-                        <Route exact path="/" element={<Login />} />
+                        <Route path="/" element={<Login />} />
                         <Route path="/sign-in" element={<Login />} />
                         <Route path="/sign-up" element={<SignUp />} />
                         <Route path="/proveedor" element={<AdminHome />} />
