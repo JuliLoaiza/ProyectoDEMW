@@ -1,7 +1,7 @@
 import React from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Login from "./components/login_component";
 import SignUp from "./components/signup_component";
@@ -11,22 +11,22 @@ import AdminHome from "./Pages/adminHome";
 function App() {
     const isLoggedIn = window.localStorage.getItem("loggedIn");
     return (
-        < Router >
+        <BrowserRouter>
             <div className="App">
                 <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                     <div className="container">
-                        <Link className="navbar-brand" to={'/sign-in'}>
+                        <Link className="navbar-brand" to={"/sign-in"}>
                             DEMW
                         </Link>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
-                                    <Link className="nav-link" to={'/sign-in'}>
+                                    <Link className="nav-link" to={"/sign-in"}>
                                         Log In
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to={'/sign-up'}>
+                                    <Link className="nav-link" to={"/sign-up"}>
                                         Registro
                                     </Link>
                                 </li>
@@ -44,8 +44,8 @@ function App() {
                     </Routes>
                 </div>
             </div>
-        </Router >
+        </BrowserRouter>
     );
 }
 
-export default App
+export default App;
