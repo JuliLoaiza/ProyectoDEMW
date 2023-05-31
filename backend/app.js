@@ -32,6 +32,10 @@ require("./src/components/servicios");
 const User = mongoose.model("UserInfo");
 const Proveedor = mongoose.model("Proveedor");
 
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
 app.post("/register", async (req, res) => {
   const { fname, lname, email, password, userType } = req.body;
 
