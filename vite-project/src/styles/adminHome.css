@@ -1,0 +1,49 @@
+.container_adminHome{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.card_admin {
+  background-color: #fff;
+  display: flex;
+  width: 60%;
+
+
+}
+
+.img_containerñ {
+  width: 20px;
+}
+
+.img_adminHome {
+  width: 100%;
+}
+
+.info {
+  width: 80%;
+}
+
+.service_title {
+    padding-left: 2%;
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: space-between;
+  color: #4A4A92;
+}
+
+.service_description{
+    font-weight: bold;
+    padding-left: 2%;
+    color: #4A4A92;
+}
+
+.btn_admin{
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,17 +1,16 @@
 import React, { Component, useEffect, useState } from "react";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import { useRef } from "react";
+import "../styles/adminHome.css";
+import person from "../assets/img/person.png";
 export default function AdminHome({ userData }) {
-
     //setting state
-    const [data, setData] = useState([]);
+    const [info, setInfo] = useState([]);
     const [limit, setLimit] = useState(5);
     const [pageCount, setPageCount] = useState(1);
     const currentPage = useRef();
-
-
 
     useEffect(() => {
         currentPage.current = 1;
@@ -19,10 +18,9 @@ export default function AdminHome({ userData }) {
         getPaginatedUsers();
     }, []);
 
-
     //fetching all user
     const getAllUser = () => {
-        fetch("http://localhost:5000/getAllUser", {
+        fetch("http://localhost:5000/getAllProveedor", {
             method: "GET",
         })
             .then((res) => res.json())
@@ -31,8 +29,6 @@ export default function AdminHome({ userData }) {
                 setData(data.data);
             });
     };
-
-
 
     //logout
     const logOut = () => {
@@ -69,8 +65,6 @@ export default function AdminHome({ userData }) {
         console.log(e);
         currentPage.current = e.selected + 1;
         getPaginatedUsers();
-
-
     }
     function changeLimit() {
         currentPage.current = 1;
@@ -78,72 +72,44 @@ export default function AdminHome({ userData }) {
     }
 
     function getPaginatedUsers() {
-        fetch(`http://localhost:5000/paginatedUsers?page=${currentPage.current}&limit=${limit}`, {
+        fetch(`http://localhost:5000/getAllProveedor`, {
             method: "GET",
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data, "userData");
-                setPageCount(data.pageCount);
-                setData(data.result)
-
-
-            });
-
+                console.log(data.data[0])
+                setInfo(data.data);
+            })
     }
-
     return (
         <div className="auth-wrapper" style={{ height: "auto" }}>
             <div className="auth-inner" style={{ width: "auto" }}>
                 <h3>Hola, proveedor</h3>
-                <table style={{ width: 500 }}>
-                    <tr>
-                        <th>Servicio</th>
-                        <th>Descripción</th>
-                        <th>Categoría</th>
-                        <th>Borrar</th>
-                    </tr>
-                    {data.map((i) => {
-                        return (
-                            <tr>
-                                <td>{i.fname}</td>
-                                <td>{i.email}</td>
-                                <td>{i.userType}</td>
-                                <td>
-                                    <FontAwesomeIcon
-                                        icon={faTrash}
-                                        onClick={() => deleteUser(i._id, i.fname)}
-                                    />
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </table>
-                <ReactPaginate
-                    breakLabel="..."
-                    nextLabel="next >"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    pageCount={pageCount}
-                    previousLabel="< previous"
-                    renderOnZeroPageCount={null}
-                    marginPagesDisplayed={2}
-                    containerClassName="pagination justify-content-center"
-                    pageClassName="page-item"
-                    pageLinkClassName="page-link"
-                    previousClassName="page-item"
-                    previousLinkClassName="page-link"
-                    nextClassName="page-item"
-                    nextLinkClassName="page-link"
-                    activeClassName="active"
-                    forcePage={currentPage.current - 1}
-                />
-                <input placeholder="Limit" onChange={e => setLimit(e.target.value)} />
-                <button onClick={changeLimit}>Set Limit</button>
-                <button onClick={logOut} className="btn btn-primary">
-                    Log Out
-                </button>
             </div>
+            {info && info.map((i) => (
+                <div key={i._id}>
+                    <div className="container_adminHome">
+                        <div className="card_admin">
+                            <div className="img_container">
+                                <img className="img_adminHome" src={person} alt="" />
+                            </div>
+                            <div className="info">
+                                <div className="service_title">
+                                    <p>{i.name}</p>
+                                    <p>{i.calificacion}</p>
+                                </div>
+                                <div className="service_description">
+                                    <p>{i.descripcion}</p>
+                                    <div className="btn_admin">
+                                        <p>Categoria : {i.categoria}</p>
+                                        <button className="btn btn-primary">Editar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
         </div>
     );
 }
