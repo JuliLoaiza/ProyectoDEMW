@@ -1,9 +1,12 @@
 import React, { Component, useState } from "react";
+import { useNavigate } from 'react-router-dom'
+
 
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate()
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -29,7 +32,7 @@ export default function Login() {
                     alert("login successful");
                     window.localStorage.setItem("token", data.data);
                     window.localStorage.setItem("loggedIn", true);
-                    window.location.href = "./userDetails";
+                    navigate('/userDetails')
                 }
             });
     }
