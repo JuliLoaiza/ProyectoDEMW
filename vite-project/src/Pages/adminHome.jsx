@@ -3,6 +3,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactPaginate from "react-paginate";
 import { useRef } from "react";
+import Swal from "sweetalert2";
 import "../styles/adminHome.css";
 import person from "../assets/img/person.png";
 export default function AdminHome({ userData }) {
@@ -18,17 +19,6 @@ export default function AdminHome({ userData }) {
         getPaginatedUsers();
     }, []);
 
-    //fetching all user
-    const getAllUser = () => {
-        fetch("http://localhost:5000/getAllProveedor", {
-            method: "GET",
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data, "userData");
-                setData(data.data);
-            });
-    };
 
     //logout
     const logOut = () => {
@@ -37,38 +27,151 @@ export default function AdminHome({ userData }) {
     };
 
     //deleting user
-    const deleteUser = (id, name) => {
-        if (window.confirm(`Are you sure you want to delete ${name}`)) {
-            fetch("http://localhost:5000/deleteUser", {
-                method: "POST",
-                crossDomain: true,
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify({
-                    userid: id,
-                }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    alert(data.data);
-                    getAllUser();
+    const handleDeleteClick = (id) => {
+        Swal.fire({
+            title: 'Eliminar Proveedor',
+            text: '¿Estás seguro de que quieres eliminar este proveedor?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return fetch(`http://localhost:5000/proveedor/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`);
+                    });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Eliminado',
+                    text: 'El proveedor ha sido eliminado.',
+                    icon: 'success'
+                }).then(() => {
+                    window.location.reload();
                 });
-        } else {
-        }
+            }
+        });
     };
 
-    //pagination
-    function handlePageClick(e) {
-        console.log(e);
-        currentPage.current = e.selected + 1;
-        getPaginatedUsers();
-    }
-    function changeLimit() {
-        currentPage.current = 1;
-        getPaginatedUsers();
+    const handleEditClick = (id) => {
+        console.log(id);
+        Swal.fire({
+            title: 'Editar Servicio',
+            html:
+                '<input id="name" class="swal2-input" placeholder="Nombre" autocapitalize="off">' +
+                '<input id="descripcion" class="swal2-input" placeholder="Descripción">' +
+                '<input id="categoria" class="swal2-input" placeholder="Categoría">' +
+                '<input id="calificacion" class="swal2-input" placeholder="Calificación">',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Actualizar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                const name = Swal.getPopup().querySelector('#name').value;
+                const descripcion = Swal.getPopup().querySelector('#descripcion').value;
+                const categoria = Swal.getPopup().querySelector('#categoria').value;
+                const calificacion = Swal.getPopup().querySelector('#calificacion').value;
+
+                return fetch(`http://localhost:5000/proveedor/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        descripcion,
+                        categoria,
+                        calificacion
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`);
+                    });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Actualización exitosa',
+                    text: 'El servicio ha sido actualizado.',
+                    icon: 'success'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+        });
+    };
+
+    const handleSubmitClick = () => {
+        Swal.fire({
+            title: 'Crear Nuevo Servicio',
+            html:
+                '<input id="name" class="swal2-input" placeholder="Nombre" autocapitalize="off">' +
+                '<input id="descripcion" class="swal2-input" placeholder="Descripción">' +
+                '<input id="categoria" class="swal2-input" placeholder="Categoría">' +
+                '<input id="calificacion" class="swal2-input" placeholder="Calificación">',
+
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Crear',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                const name = Swal.getPopup().querySelector('#name').value;
+                const descripcion = Swal.getPopup().querySelector('#descripcion').value;
+                const categoria = Swal.getPopup().querySelector('#categoria').value;
+                const calificacion = Swal.getPopup().querySelector('#calificacion').value;
+
+                return fetch("http://localhost:5000/proveedor", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name,
+                        descripcion,
+                        categoria,
+                        calificacion,
+                    }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText)
+                        }
+                        return response.json()
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`)
+                    })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: `Añadido exiosamente`,
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+        })
     }
 
     function getPaginatedUsers() {
@@ -77,7 +180,7 @@ export default function AdminHome({ userData }) {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.data[0])
+                // console.log(data.data[0]._id)
                 setInfo(data.data);
             })
     }
@@ -85,6 +188,9 @@ export default function AdminHome({ userData }) {
         <div className="auth-wrapper" style={{ height: "auto" }}>
             <div className="auth-inner" style={{ width: "auto" }}>
                 <h3>Hola, proveedor</h3>
+                <button type="submit" className="btn btn-primary" onClick={handleSubmitClick}>
+                    Anadir Nuevo servicio
+                </button>
             </div>
             {info && info.map((i) => (
                 <div key={i._id}>
@@ -102,14 +208,22 @@ export default function AdminHome({ userData }) {
                                     <p>{i.descripcion}</p>
                                     <div className="btn_admin">
                                         <p>Categoria : {i.categoria}</p>
-                                        <button className="btn btn-primary">Editar</button>
+                                        <div style={{ display: 'flex', gap: '1rem' }}>
+                                            <button className="btn btn-primary" onClick={() => handleEditClick(i._id)}>Editar</button>
+                                            <button className="btn btn-primary" onClick={() => handleDeleteClick(i._id)}>Eliminar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             ))}
+            <button onClick={logOut} className="btn btn-primary">
+                Log Out
+            </button>
         </div>
+
     );
 }
