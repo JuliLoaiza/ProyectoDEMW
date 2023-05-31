@@ -46,14 +46,14 @@ function ImageUpload() {
     return (
         <div className="auth-wrapper" >
             <div className="auth-inner" style={{ width: "auto" }}>
-                Let's Upload Image<br />
+                Subir una imagen<br />
                 <input
                     accept="image/*"
                     type="file"
                     onChange={covertToBase64}
                 />
                 {image == "" || image == null ? "" : <img width={100} height={100} src={image} />}
-                <button onClick={uploadImage}>Upload</button>
+                <button onClick={uploadImage}>Subir</button>
                 <br />
                 {allImage.map(data => {
                     return (

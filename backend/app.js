@@ -5,8 +5,11 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());
 const bcrypt = require("bcryptjs");
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: false }));
 
 const jwt = require("jsonwebtoken");
+
 const JWT_SECRET =
   "kjsgaduiq[adaskd][[]oaghsuidgasiug((?ASdasdasdjbdj2913yuw1ee9999";
 
@@ -29,11 +32,13 @@ const User = mongoose.model("UserInfo");
 
 app.post("/register", async (req, res) => {
   const { fname, lname, email, password, userType } = req.body;
+
   const encryptedPassword = await bcrypt.hash(password, 10);
   try {
     const oldUser = await User.findOne({ email });
+
     if (oldUser) {
-      return res.send({ error: "El usuario ya existe" });
+      return res.json({ error: "User Exists" });
     }
     await User.create({
       fname,
@@ -44,7 +49,7 @@ app.post("/register", async (req, res) => {
     });
     res.send({ status: "ok" });
   } catch (error) {
-    res.send({ status: "Error" });
+    res.send({ status: "error" });
   }
 });
 
@@ -53,7 +58,7 @@ app.post("/login-user", async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return res.json({ error: "Usuario no encontrado" });
+    return res.json({ error: "User Not found" });
   }
   if (await bcrypt.compare(password, user.password)) {
     const token = jwt.sign({ email: user.email }, JWT_SECRET, {
@@ -73,16 +78,88 @@ app.post("/userData", async (req, res) => {
   const { token } = req.body;
   try {
     const user = jwt.verify(token, JWT_SECRET, (err, res) => {
-      console.log(err, "error");
-      console.log(res, "result");
+      if (err) {
+        return "token expired";
+      }
+      return res;
     });
+    console.log(user);
+    if (user == "token expired") {
+      return res.send({ status: "error", data: "token expired" });
+    }
+
     const useremail = user.email;
     User.findOne({ email: useremail })
       .then((data) => {
         res.send({ status: "ok", data: data });
       })
       .catch((error) => {
-        res.send({ status: "error", data: data });
+        res.send({ status: "error", data: error });
       });
   } catch (error) {}
+});
+
+app.get("/getAllUser", async (req, res) => {
+  try {
+    const allUser = await User.find({});
+    res.send({ status: "ok", data: allUser });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post("/deleteUser", async (req, res) => {
+  const { userid } = req.body;
+  try {
+    User.deleteOne({ _id: userid }, function (err, res) {
+      console.log(err);
+    });
+    res.send({ status: "Ok", data: "Deleted" });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post("/upload-image", async (req, res) => {
+  const { base64 } = req.body;
+  try {
+    await Images.create({ image: base64 });
+    res.send({ Status: "ok" });
+  } catch (error) {
+    res.send({ Status: "error", data: error });
+  }
+});
+
+app.get("/get-image", async (req, res) => {
+  try {
+    await Images.find({}).then((data) => {
+      res.send({ status: "ok", data: data });
+    });
+  } catch (error) {}
+});
+
+app.get("/paginatedUsers", async (req, res) => {
+  const allUser = await User.find({});
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+
+  const startIndex = (page - 1) * limit;
+  const lastIndex = page * limit;
+
+  const results = {};
+  results.totalUser = allUser.length;
+  results.pageCount = Math.ceil(allUser.length / limit);
+
+  if (lastIndex < allUser.length) {
+    results.next = {
+      page: page + 1,
+    };
+  }
+  if (startIndex > 0) {
+    results.prev = {
+      page: page - 1,
+    };
+  }
+  results.result = allUser.slice(startIndex, lastIndex);
+  res.json(results);
 });

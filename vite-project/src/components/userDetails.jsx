@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
-import AdminHome from "./adminHome";
+import AdminHome from "../Pages/adminHome";
 
-import UserHome from "./userHome";
+import UserHome from "../Pages/userHome";
 
 export default function UserDetails() {
     const [userData, setUserData] = useState("");
@@ -29,7 +29,6 @@ export default function UserDetails() {
 
                 setUserData(data.data);
 
-                // Cerrar Sesión
                 if (data.data == "token expired") {
                     alert("Token expired login again");
                     window.localStorage.clear();
@@ -40,3 +39,4 @@ export default function UserDetails() {
 
     return admin ? <AdminHome /> : <UserHome userData={userData} />;
 }
+
