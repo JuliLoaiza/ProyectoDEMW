@@ -33,7 +33,6 @@ export default function Login() {
                 }
             });
     }
-
     return (
         <div className="auth-wrapper">
             <div className="auth-inner">

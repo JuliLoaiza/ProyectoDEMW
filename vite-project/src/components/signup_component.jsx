@@ -58,7 +58,7 @@ export default function SignUp() {
                         <input
                             type="radio"
                             name="UserType"
-                            value="Proveedor"
+                            value="Admin"
                             onChange={(e) => setUserType(e.target.value)}
                         />
                         Proveedor
@@ -70,7 +70,7 @@ export default function SignUp() {
                                 type="text"
                                 className="form-control"
                                 placeholder="Servicio"
-                                onChange={(e) => setSecretKey(e.target.value)}
+                                onChange={(e) => setServicio(e.target.value)}
                             />
                         </div>
                     ) : null}

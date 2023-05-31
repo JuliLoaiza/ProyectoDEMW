@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "./components/login_component";
 import SignUp from "./components/signup_component";
 import UserDetails from "./components/userDetails";
+import AdminHome from "./Pages/adminHome";
 
 function App() {
     const isLoggedIn = window.localStorage.getItem("loggedIn");
@@ -39,6 +40,7 @@ function App() {
                             <Route exact path="/" element={isLoggedIn == "true" ? <UserDetails /> : <Login />} />
                             <Route path="/sign-in" element={<Login />} />
                             <Route path="/sign-up" element={<SignUp />} />
+                            <Route path="/proveedor" element={<AdminHome />} />
                             <Route path="/userDetails" element={<UserDetails />} />
                         </Routes>
                     </div>
