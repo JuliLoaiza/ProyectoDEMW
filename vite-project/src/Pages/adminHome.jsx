@@ -39,7 +39,7 @@ export default function AdminHome({ userData }) {
             cancelButtonText: 'Cancelar',
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                return fetch(`http://localhost:5000/proveedor/${id}`, {
+                return fetch(`https://backend-mxc3.onrender.com/proveedor/${id}`, {
                     method: 'DELETE'
                 })
                     .then(response => {
@@ -85,7 +85,7 @@ export default function AdminHome({ userData }) {
                 const categoria = Swal.getPopup().querySelector('#categoria').value;
                 const calificacion = Swal.getPopup().querySelector('#calificacion').value;
 
-                return fetch(`http://localhost:5000/proveedor/${id}`, {
+                return fetch(`https://backend-mxc3.onrender.com/proveedor/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'

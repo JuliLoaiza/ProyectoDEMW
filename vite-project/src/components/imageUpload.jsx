@@ -22,7 +22,7 @@ function ImageUpload() {
     }, [])
 
     function uploadImage() {
-        fetch("http://localhost:5000/upload-image", {
+        fetch("https://backend-mxc3.onrender.com/upload-image", {
             method: "POST",
             crossDomain: true,
             headers: {
@@ -36,7 +36,7 @@ function ImageUpload() {
         }).then((res) => res.json()).then((data) => console.log(data))
     }
     function getImage() {
-        fetch("http://localhost:5000/get-image", {
+        fetch("https://backend-mxc3.onrender.com/get-image", {
             method: "GET",
         }).then((res) => res.json()).then((data) => {
             console.log(data)
