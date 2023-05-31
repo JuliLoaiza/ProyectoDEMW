@@ -25,7 +25,7 @@ export default function UserHome({ userData }) {
     };
 
     function getPaginatedUsers() {
-        fetch(`http://localhost:5000/getAllProveedor`, {
+        fetch(`https://backend-mxc3.onrender.com/getAllProveedor`, {
             method: "GET",
         })
             .then((res) => res.json())
