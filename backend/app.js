@@ -28,14 +28,20 @@ require("./src/components/userDetails");
 const User = mongoose.model("UserInfo");
 
 app.post("/register", async (req, res) => {
-  const { fname, lname, email, password } = req.body;
+  const { fname, lname, email, password, userType } = req.body;
   const encryptedPassword = await bcrypt.hash(password, 10);
   try {
     const oldUser = await User.findOne({ email });
     if (oldUser) {
       return res.send({ error: "El usuario ya existe" });
     }
-    await User.create({ fname, lname, email, password: encryptedPassword });
+    await User.create({
+      fname,
+      lname,
+      email,
+      password: encryptedPassword,
+      userType,
+    });
     res.send({ status: "ok" });
   } catch (error) {
     res.send({ status: "Error" });

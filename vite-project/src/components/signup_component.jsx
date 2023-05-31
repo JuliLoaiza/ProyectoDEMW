@@ -45,7 +45,7 @@ export default function SignUp() {
         <div className="auth-wrapper">
             <div className="auth-inner">
                 <form onSubmit={handleSubmit}>
-                    <h3>Sign Up</h3>
+                    <h3>Registro</h3>
                     <div>
                         Registrar como
                         <input
@@ -76,52 +76,52 @@ export default function SignUp() {
                     ) : null}
 
                     <div className="mb-3">
-                        <label>First name</label>
+                        <label>Nombre</label>
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="First name"
+                            placeholder="Nombre"
                             onChange={(e) => setFname(e.target.value)}
                         />
                     </div>
 
                     <div className="mb-3">
-                        <label>Last name</label>
+                        <label>Apellido</label>
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Last name"
+                            placeholder="Apellido"
                             onChange={(e) => setLname(e.target.value)}
                         />
                     </div>
 
                     <div className="mb-3">
-                        <label>Email address</label>
+                        <label>Correo Electrónico</label>
                         <input
                             type="email"
                             className="form-control"
-                            placeholder="Enter email"
+                            placeholder="Correo electrónico"
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
 
                     <div className="mb-3">
-                        <label>Password</label>
+                        <label>Contraseña</label>
                         <input
                             type="password"
                             className="form-control"
-                            placeholder="Enter password"
+                            placeholder="Contraseña "
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
                     <div className="d-grid">
                         <button type="submit" className="btn btn-primary">
-                            Sign Up
+                            Enviar
                         </button>
                     </div>
                     <p className="forgot-password text-right">
-                        Already registered <a href="/sign-in">sign in?</a>
+                        ¿Ya estás registrado? <a href="/sign-in"> Inicia sesión </a>
                     </p>
                 </form>
             </div>
