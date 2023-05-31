@@ -28,7 +28,9 @@ app.listen(5000, () => {
 });
 
 require("./src/components/userDetails");
+require("./src/components/servicios");
 const User = mongoose.model("UserInfo");
+const Proveedor = mongoose.model("Proveedor");
 
 app.post("/register", async (req, res) => {
   const { fname, lname, email, password, userType } = req.body;
@@ -50,6 +52,55 @@ app.post("/register", async (req, res) => {
     res.send({ status: "ok" });
   } catch (error) {
     res.send({ status: "error" });
+  }
+});
+
+app.post("/proveedor", async (req, res) => {
+  const { name, descripcion, categoria, calificacion } = req.body;
+  try {
+    await Proveedor.create({
+      name,
+      descripcion,
+      categoria,
+      calificacion,
+    });
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error" });
+  }
+});
+
+app.delete("/proveedor/:id", async (req, res) => {
+  const proveedorId = req.params.id;
+  try {
+    await Proveedor.findByIdAndDelete(proveedorId);
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error" });
+  }
+});
+
+app.put("/proveedor/:id", async (req, res) => {
+  const proveedorId = req.params.id;
+  const { name, descripcion, categoria, calificacion } = req.body;
+  try {
+    await Proveedor.findByIdAndUpdate(
+      proveedorId,
+      { name, descripcion, categoria, calificacion },
+      { new: true }
+    );
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error" });
+  }
+});
+
+app.get("/getAllProveedor", async (req, res) => {
+  try {
+    const allProveedor = await Proveedor.find({});
+    res.send({ status: "ok", data: allProveedor });
+  } catch (error) {
+    console.log(error);
   }
 });
 
