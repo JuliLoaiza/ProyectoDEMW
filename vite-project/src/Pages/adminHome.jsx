@@ -143,7 +143,7 @@ export default function AdminHome({ userData }) {
                 const categoria = Swal.getPopup().querySelector('#categoria').value;
                 const calificacion = Swal.getPopup().querySelector('#calificacion').value;
 
-                return fetch("http://localhost:5000/proveedor", {
+                return fetch("https://backend-mxc3.onrender.com/proveedor", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
