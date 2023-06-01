@@ -6,7 +6,10 @@ import { useRef } from "react";
 import Swal from "sweetalert2";
 import "../styles/adminHome.css";
 import person from "../assets/img/person.png";
+import { useNavigate } from 'react-router-dom'
+
 export default function AdminHome({ userData }) {
+    const navigate = useNavigate()
     //setting state
     const [info, setInfo] = useState([]);
     const [limit, setLimit] = useState(5);
@@ -23,7 +26,7 @@ export default function AdminHome({ userData }) {
     //logout
     const logOut = () => {
         window.localStorage.clear();
-        window.location.href = "./sign-in";
+        navigate('/')
     };
 
     //deleting user

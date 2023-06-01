@@ -80,9 +80,9 @@ export default function Login() {
                             Enviar
                         </button>
                     </div>
-                    <p className="forgot-password text-right">
-                        <a href="/sign-up">Regístrate</a>
-                    </p>
+
+                    <p className="forgot-password text-right" onClick={() => navigate('/sign-up')}>Regístrate </p>
+
                 </form>
             </div>
         </div>

@@ -1,6 +1,8 @@
 import React, { Component, useState } from "react";
+import { useNavigate } from 'react-router-dom'
 
 export default function SignUp() {
+    const navigate = useNavigate()
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [email, setEmail] = useState("");
@@ -121,7 +123,7 @@ export default function SignUp() {
                         </button>
                     </div>
                     <p className="forgot-password text-right">
-                        ¿Ya estás registrado? <a href="/sign-in"> Inicia sesión </a>
+                        ¿Ya estás registrado? <span className="forgot-password text-right" onClick={() => navigate('/sign-in')}> Inicia sesión </span>
                     </p>
                 </form>
             </div>
