@@ -1,11 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
 import AdminHome from "../Pages/adminHome";
-
+import { useNavigate } from 'react-router-dom'
 import UserHome from "../Pages/userHome";
 
 export default function UserDetails() {
     const [userData, setUserData] = useState("");
     const [admin, setAdmin] = useState(false);
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetch("https://backend-mxc3.onrender.com/userData", {
@@ -22,9 +23,10 @@ export default function UserDetails() {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data, "userData");
+                console.log(data.data.userType);
                 if (data.data.userType == "Admin") {
                     setAdmin(true);
+
                 }
 
                 setUserData(data.data);
@@ -32,11 +34,11 @@ export default function UserDetails() {
                 if (data.data == "token expired") {
                     alert("Token expired login again");
                     window.localStorage.clear();
-                    window.location.href = "./sign-in";
+                    navigate('/sign-in')
                 }
             });
     }, []);
-
+    console.log(admin)
     return admin ? <AdminHome /> : <UserHome userData={userData} />;
 }
 

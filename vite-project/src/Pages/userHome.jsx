@@ -3,9 +3,11 @@ import { useRef } from "react";
 import Swal from "sweetalert2";
 import "../styles/adminHome.css";
 import person from "../assets/img/person.png";
+import { useNavigate } from 'react-router-dom'
 
 export default function UserHome({ userData }) {
     //setting state
+    const navigate = useNavigate()
     const [info, setInfo] = useState([]);
     const [limit, setLimit] = useState(5);
     const [pageCount, setPageCount] = useState(1);
@@ -21,7 +23,7 @@ export default function UserHome({ userData }) {
     //logout
     const logOut = () => {
         window.localStorage.clear();
-        window.location.href = "./sign-in";
+        navigate('/')
     };
 
     function getPaginatedUsers() {
